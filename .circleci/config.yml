@@ -18,6 +18,7 @@ jobs:
 
     steps:
       - checkout
+      - setup_remote_docker
 
       # Download and cache dependencies
       - restore_cache:
@@ -36,3 +37,13 @@ jobs:
       # run tests!
       - run: yarn ng build --prod
       - run: yarn ng test --watch=false
+      - run: 
+            command: | 
+              docker build -t container2705.azurecr.io/firstimage .
+      - run: 
+             command: | 
+              docker login --username $DockerUser --password $Docker_pass container2705.azurecr.io
+
+      - run: 
+             command: | 
+                  docker push container2705.azurecr.io/firstimage
